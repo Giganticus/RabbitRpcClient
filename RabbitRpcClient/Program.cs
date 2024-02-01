@@ -1,23 +1,23 @@
 ﻿namespace RabbitRpcClient;
 
-class Program
+public static class Program
 {
     public static async Task Main(string[] args)
     {
-        Console.WriteLine("RPC Client");
+        Console.WriteLine("RPC Client Greeter using Rabbit libs directly");
+
+        string? nameToGreet;
         
-        await InvokeAsync("{\"rpcField\":\"rpcValue\"}");
-
-        Console.WriteLine("Press [enter] to exit.");
-        Console.ReadLine();
-    }
-
-    private static async Task InvokeAsync(string n)
-    {
         using var rpcClient = new RpcClient();
-
-       // Console.WriteLine(" [x] Requesting fib({0})", n);
-        var response = await rpcClient.CallAsync(n);
-        Console.WriteLine("Got '{0}'", response);
+        
+        Console.WriteLine("Enter a name to receive a greeting. 'Quit' to quit.");
+        while ((nameToGreet = Console.ReadLine()) != "Quit")
+        {
+            if(string.IsNullOrWhiteSpace(nameToGreet))
+                continue;
+            var response = await rpcClient.CallAsync(nameToGreet);
+            Console.WriteLine($"Received: {response}");
+        }
+        
     }
 }
